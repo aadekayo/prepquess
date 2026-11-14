@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YVL Prep Quest</title>
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060606;--card:#111;--card2:#161616;--line:#262626;--ink:#f3f3f3;--mute:#8d8d8d;--red:#e10600;--red2:#ff3b30;--ok:#3ddc84;--bad:#ff4d4d}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;min-height:100vh;line-height:1.45}
+#fx{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+body:before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(1100px 520px at 50% -160px,rgba(190,0,0,.33),transparent 65%),radial-gradient(700px 400px at 100% 100%,rgba(120,0,0,.16),transparent 70%)}
+.top,main,nav.tabs{position:relative;z-index:1}
+h1,h2,h3,.gothic{font-family:'Pirata One','Space Grotesk',serif;font-weight:400;letter-spacing:.5px}
+a{color:inherit}
+.top{position:sticky;top:0;z-index:5;background:rgba(6,6,6,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .in{max-width:980px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-size:28px;line-height:1;cursor:pointer;white-space:nowrap}
+.logo b{color:var(--red);font-weight:400;text-shadow:0 0 18px rgba(225,6,0,.7)}
+.links{display:none;gap:4px}
+.links button{padding:8px 12px;border-radius:999px;font-size:14px;font-weight:700;color:var(--mute)}
+.links button.on,.links button:hover{color:var(--ink);background:#1a1a1a}
+.pills{display:flex;gap:6px}
+.pill{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);background:#0d0d0d;padding:6px 10px;border-radius:999px;font-size:13px;font-weight:700;white-space:nowrap}
+main{max-width:760px;margin:0 auto;padding:18px 16px 110px}
+.card{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:14px}
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#240000,#0c0c0c 62%);border-color:#4a0c0c;padding:22px}
+.hero svg.bat{position:absolute;right:-30px;top:-6px;width:260px;opacity:.16;fill:#ff2a1f;transform:rotate(-8deg)}
+.rank{font-size:46px;line-height:1.02;text-shadow:0 0 30px rgba(225,6,0,.45)}
+.sub{color:var(--mute);font-size:13px}
+.bar{height:10px;background:#1d1d1d;border-radius:99px;overflow:hidden;margin:10px 0 6px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--red2));border-radius:99px;transition:width .4s;box-shadow:0 0 12px rgba(225,6,0,.6)}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+.btn{display:block;width:100%;padding:15px;border-radius:14px;background:var(--red);color:#fff;font-weight:700;font-size:16px;box-shadow:0 4px 0 #7d0300;transition:transform .08s;text-align:center;text-decoration:none}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #7d0300}
+.btn.ghost{background:#1b1b1b;box-shadow:0 4px 0 #000;border:1px solid var(--line)}
+.btn.sm{display:inline-block;width:auto;padding:9px 14px;font-size:14px;border-radius:11px}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btns .btn{flex:1}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:14px}
+.mod{text-align:left;padding:16px;border-radius:18px;background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);min-height:128px;display:flex;flex-direction:column;justify-content:space-between;transition:.15s}
+.mod:hover{border-color:var(--red);transform:translateY(-2px);box-shadow:0 10px 30px rgba(225,6,0,.15)}
+.mod .n{font-family:'Pirata One';font-size:23px;line-height:1.1}
+.mod .p{font-size:12px;color:var(--mute)}
+.mini{height:5px;background:#222;border-radius:9px;margin-top:8px;overflow:hidden}.mini i{display:block;height:100%;background:var(--red2)}
+.tag{font-size:11px;text-transform:uppercase;letter-spacing:1.6px;color:var(--red2);font-weight:700}
+.q{font-size:21px;font-weight:700;line-height:1.3;margin:10px 0 16px}
+.opt{display:flex;gap:12px;align-items:center;width:100%;text-align:left;padding:14px;border-radius:14px;border:2px solid var(--line);background:#0e0e0e;margin-bottom:10px;font-weight:500;font-size:15px;transition:.12s}
+.opt kbd{font:700 12px 'Space Grotesk';color:var(--mute);border:1px solid var(--line);border-radius:6px;padding:2px 7px}
+.opt:hover:not(:disabled){border-color:#666}
+.opt.ok{border-color:var(--ok);background:#0c1f14}.opt.bad{border-color:var(--bad);background:#240d0d}
+.fb{border-radius:14px;padding:12px 14px;margin:6px 0 12px;font-size:14px}
+.fb.ok{background:#0c1f14;border:1px solid #1f5a39}.fb.bad{background:#240d0d;border:1px solid #6b1f1f}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.x{font-size:22px;color:var(--mute);padding:4px 8px}
+.ach{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.ach:last-child{border:0}.ach.off{opacity:.33}
+.ach>span{font-size:22px;width:32px;text-align:center;flex:none}
+.skill{margin:12px 0}.skill .row{font-size:13px}
+nav.tabs{position:fixed;bottom:0;left:0;right:0;z-index:5;display:flex;background:rgba(6,6,6,.94);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+nav.tabs button{flex:1;padding:10px 2px 13px;font-size:11px;color:var(--mute);font-weight:700}
+nav.tabs button.on{color:var(--red2)}
+nav.tabs button em{display:block;font-style:normal;font-size:20px}
+.big{font-family:'Pirata One';font-size:76px;text-align:center;line-height:1;text-shadow:0 0 34px rgba(225,6,0,.6)}
+.center{text-align:center}
+.foot{font-size:11px;color:#5c5c5c;text-align:center;margin-top:20px}
+.shake{animation:sh .3s}@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.pop{animation:pp .35s}@keyframes pp{0%{transform:translateY(10px);opacity:0}100%{transform:none;opacity:1}}
+input[type=file]{display:none}
+h2.sec{font-size:36px;line-height:1.05;margin:4px 0 6px}
+p.lead{color:#c9c9c9;font-size:15px;margin-bottom:6px}
+.ring{--p:0;width:74px;height:74px;border-radius:50%;flex:none;background:conic-gradient(var(--red2) calc(var(--p)*1%),#222 0);display:grid;place-items:center}
+.ring b{width:58px;height:58px;border-radius:50%;background:#101010;display:grid;place-items:center;font-size:13px}
+.ticker{overflow:hidden;white-space:nowrap;border-block:1px solid var(--line);padding:8px 0;margin:0 0 14px;color:#6d6d6d;font-size:12px;letter-spacing:3px;text-transform:uppercase}
+.ticker span{display:inline-block;animation:mq 26s linear infinite}@keyframes mq{to{transform:translateX(-50%)}}
+.track{display:flex;align-items:center;gap:14px;padding:12px;border:1px solid var(--line);border-radius:14px;background:#0d0d0d;margin-top:10px;text-decoration:none;transition:.15s}
+.track:hover{border-color:var(--red)}
+.track .no{font-family:'Pirata One';font-size:26px;color:var(--red2);width:34px;text-align:center}
+.track .go{margin-left:auto;color:var(--mute);font-size:13px;font-weight:700}
+.eq{display:flex;gap:3px;align-items:flex-end;height:26px}
+.eq i{width:4px;background:var(--red2);border-radius:2px;height:20%}
+.eq.on i{animation:eq .5s ease-in-out infinite alternate}.eq.on i:nth-child(2){animation-delay:.12s}.eq.on i:nth-child(3){animation-delay:.3s}.eq.on i:nth-child(4){animation-delay:.2s}
+@keyframes eq{to{height:100%}}
+textarea,input[type=text]{width:100%;background:#0b0b0b;border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:12px;font:inherit;font-size:15px;margin-top:8px}
+textarea{min-height:150px;resize:vertical}
+textarea:focus,input:focus{outline:2px solid var(--red);outline-offset:1px}
+.line{font-size:22px;line-height:1.9;font-weight:500;margin:14px 0}
+.line input{width:auto;display:inline-block;margin:0 3px;padding:3px 8px;font-size:19px;border-radius:8px;text-align:center}
+.line input.ok{border-color:var(--ok);color:var(--ok)}.line input.bad{border-color:var(--bad);color:var(--bad)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:11px;overflow:hidden}
+.seg button{padding:8px 12px;font-size:13px;font-weight:700;color:var(--mute)}.seg button.on{background:var(--red);color:#fff}
+.tl{position:relative;padding-left:22px;border-left:2px solid #3a0a0a;margin:16px 0 4px 6px}
+.tl .ev{position:relative;margin-bottom:20px}
+.tl .ev:before{content:"";position:absolute;left:-29px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--red);box-shadow:0 0 12px var(--red)}
+.tl .when{font-size:12px;color:var(--red2);font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+.tl h3{font-size:24px;line-height:1.1;margin:2px 0 4px}
+.tl p{font-size:14px;color:#c9c9c9}
+.note{font-size:13px;color:var(--mute);border:1px dashed #333;border-radius:12px;padding:10px 12px;margin-top:10px}
+.miss{font-size:14px;padding:10px 0;border-bottom:1px solid var(--line)}.miss:last-child{border:0}.miss b{color:var(--ok)}
+.about p{margin:10px 0;color:#d6d6d6;font-size:15.5px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:10px}
+.steps div{border:1px solid var(--line);border-radius:14px;padding:12px;background:#0d0d0d;font-size:14px}
+.steps b{display:block;font-family:'Pirata One';font-weight:400;font-size:21px;color:var(--red2)}
+input[type=range]{width:100%;accent-color:var(--red)}
+@media(min-width:760px){.links{display:flex}nav.tabs{display:none}main{padding-bottom:60px}.rank{font-size:60px}.hero{padding:30px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+<div class="top"><div class="in">
+ <div class="logo gothic" id="logo"><b>YVL</b> Prep Quest</div>
+ <div class="links" id="links"></div>
+ <div class="pills"><span class="pill" id="pStreak">🔥 0</span><span class="pill" id="pXp">⚡ 0</span></div>
+</div></div>
+<main id="app"></main>
+<nav class="tabs" id="tabs"></nav>
+<input type="file" id="trackFile" accept="audio/*">
+<audio id="bg" loop></audio>
+<script>
+const MODS={
+ trim:{n:"Carti & Trim Levels",d:"Founder, flagships, the duo, YVL"},
+ proto:{n:"Protocols",d:"Codes, look, crew, how 00pium moves"},
+ under:{n:"Rising Underground",d:"Who's next and who's not Opium"},
+ collab:{n:"Outside Collabs",d:"Giselle, The Weeknd, Snow Strippers +"},
+ leaks:{n:"Leak Lore",d:"What slipped out, and what didn't"}
+};
+// [module, difficulty 1-3, question, options (first = correct), explanation]
+const Q=[
+["trim",1,"Who founded Opium?",["Playboi Carti","Ken Carson","A$AP Rocky","Lil Uzi Vert"],"Carti started the label in 2019."],
+["trim",1,"What city is Opium based in?",["Atlanta","Houston","New York","Los Angeles"],"Opium is an Atlanta label, and most of its acts are from there."],
+["trim",1,"Who was the first artist signed to Opium?",["Ken Carson","Destroy Lonely","Homixide Gang","ApolloRed1"],"Ken Carson signed in 2019."],
+["trim",2,"What year did Destroy Lonely sign?",["2021","2019","2023","2018"],"Lone joined in 2021, two years after Ken."],
+["trim",2,"HXG (Homixide Gang) is a duo made up of…",["Beno! and Meechie","Ken and Lone","F1lthy and Lil 88","Lucian and Clayco"],"Beno! and Meechie, both Atlanta natives."],
+["trim",2,"Which was the first Opium album to hit No. 1 on the Billboard 200?",["More Chaos","A Great Chaos","If Looks Could Kill","Love Lasts Forever"],"Ken Carson's More Chaos did it in April 2025."],
+["trim",1,"Carti's third studio album, released March 14, 2025, is called…",["MUSIC","Narcissist","Whole Lotta Red 2","Die Lit 2"],"MUSIC, long teased as 'I Am Music'."],
+["trim",1,"Whole Lotta Red dropped on which date?",["Christmas Day 2020","Halloween 2020","New Year's Day 2021","July 4, 2020"],"December 25, 2020."],
+["trim",2,"Destroy Lonely's debut studio album is…",["If Looks Could Kill","No Stylist","Love Lasts Forever","X"],"If Looks Could Kill, May 2023. No Stylist was a mixtape."],
+["trim",2,"Ken Carson's first Billboard Hot 100 entry was…",["Overseas","Yale","Jennifer's Body","Rock N Roll"],"'Overseas' debuted on the Hot 100, his first entry."],
+["trim",3,"Who is the first artist signed to the separate YVL imprint?",["ApolloRed1","Nettspend","OsamaSon","Che"],"ApolloRed1, who called 00pium the foundation and YVL the younger crew."],
+["trim",2,"Which song gave Carti his first Hot 100 No. 1?",["Carnival","FE!N","Magnolia","Timeless"],"'Carnival' with ¥$ and Rich the Kid, 2024."],
+["trim",3,"Which non-Atlanta act joined the Opium roster in 2025?",["A$AP Nast","Yeat","Lil Yachty","Trippie Redd"],"A$AP Nast is listed as a 2025 signing, jointly with AWGE."],
+["trim",3,"Which Destroy Lonely album topped the Top R&B/Hip-Hop Albums chart?",["Love Lasts Forever","If Looks Could Kill","No Stylist","NS+ (Ultra)"],"Love Lasts Forever, August 2024."],
+["trim",1,"Carti's government name is…",["Jordan Terrell Carter","Kenyatta Frazier","Bobby Sandimanie","Symere Woods"],"Jordan Terrell Carter."],
+["proto",1,"How is the label name often stylized?",["00pium","0pium!","OPM$","Op1um"],"Two zeros: 00pium."],
+["proto",1,"YVL stands for…",["Young Vamp Life","Young Vicious Lords","Your Vamp Lifestyle","Young Villain Life"],"Young Vamp Life. It's also the hand sign."],
+["proto",2,"Besides Atlanta rage, the Opium look and sound pulls from…",["'70s and '80s punk rock","'90s boom bap","2000s crunk","Disco"],"The aesthetic leans on '70s and '80s punk."],
+["proto",2,"Which designer is the uniform, pushed by stylist Mitch Modes?",["Rick Owens","Ralph Lauren","Supreme","Bape"],"Rick Owens and all-black everything."],
+["proto",2,"Carti's creative director, featured on 'BACKR00MS', goes by…",["SEXISDEATH","Burberry Erry","Joy Divzn","OpiumBaby"],"SEXISDEATH, Rose Marie Johansen, a Norwegian tattoo artist turned creative director."],
+["proto",3,"Who's the videographer usually near Carti with a VHS camera?",["Joy Divzn","Cole Bennett","Burberry Erry","Lucian"],"Joy Divzn, a friend and collaborator rather than an official signee."],
+["proto",2,"What did Carti say he did first when starting the label?",["Signed a gang of producers","Signed five rappers","Opened a store","Bought a studio"],"He told XXL he came in signing producers first."],
+["proto",2,"Which producers are tied to both Opium and Whole Lotta Red?",["F1lthy, KP Beatz, Lil 88","Metro, Southside, TM88","Mustard, Hit-Boy, Tay Keith","Pharrell, Timbaland, Dre"],"F1lthy, KP Beatz and Lil 88 all worked heavily on WLR."],
+["proto",3,"According to Ken Carson, anyone can be…",["YVL, but he's less sure about 00pium","00pium, but not YVL","Signed if they wear black","A producer"],"YVL is open; 00pium is the inner circle."],
+["proto",1,"How does 00pium handle official social media?",["It barely has any","Daily posts","Weekly vlogs","Livestreams every drop"],"The label operates almost entirely in shadow."],
+["proto",3,"Ken and Lone broke down the label's name on which December 2025 track?",["The Acronym","The Protocol","Opium Twins","00"],"'The Acronym', released December 12, 2025."],
+["proto",2,"Carti's 'deep voice' first showed up on which feature?",["FE!N","Carnival","Popular","Off the Grid"],"Travis Scott's 'FE!N'. The baby voice came years earlier."],
+["proto",3,"Carti co-creative directed ComplexCon 2026 alongside…",["Hiroshi Fujiwara","Virgil Abloh","Nigo","Rick Owens"],"Hiroshi Fujiwara, for ComplexCon's tenth year."],
+["proto",2,"Which outerwear brand did Opium collab with in April 2025?",["Pelle Pelle","Canada Goose","The North Face","Carhartt"],"Pelle Pelle leather jackets, right after MUSIC."],
+["under",1,"Is Yeat signed to Opium?",["No, just sonically close","Yes, since 2021","Yes, to YVL","He co-founded it"],"Classic trap question. Yeat is not Opium."],
+["under",2,"Tezzus is signed to which label?",["YSL","Opium","YVL","OVO"],"Tezzus is a Young Stoner Life signee, not Opium."],
+["under",3,"Tezzus's 2026 album is titled…",["UY SCUTI BØYZ","More Chaos","Jump Out","star"],"UY SCUTI BØYZ, April 2026."],
+["under",3,"Tezzus's frequent duo partner at YSL is…",["diamond*","Che","Beno!","2hollis"],"Tezzus and diamond* keep dropping together."],
+["under",2,"OsamaSon's 2025 album is…",["Jump Out","Rest in Bass","boy","Sayso Says"],"Jump Out."],
+["under",2,"'Sayso Says' and 'Rest in Bass' belong to…",["Che","Nettspend","fakemink","OsamaSon"],"Che."],
+["under",2,"Which of these rising names is from London?",["fakemink","Che","OsamaSon","Nettspend"],"fakemink is the UK one in this list."],
+["under",3,"Lucian co-produced Ken's 'Overseas' and which Lil Yachty meme hit?",["Poland","Minnesota","One Night","Strike"],"'Poland'."],
+["under",2,"Ken Carson's breakout song 'Yale' came from which EP?",["Teen X","Project X","Xtended","Boy Barbie"],"Teen X."],
+["under",3,"Homixide Gang's breakout single that sold Carti on them was…",["SSN","TF!","Lifestyle","Uzi Work"],"Carti reportedly called them superstars after hearing 'SSN'."],
+["under",1,"2hollis released an album in 2025 called…",["star","moon","sun","sky"],"star."],
+["collab",1,"Which song has The Weeknd, Carti and Madonna?",["Popular","Timeless","Rather Lie","Creepin'"],"'Popular', June 2023."],
+["collab",1,"The Weeknd appears on which MUSIC track?",["Rather Lie","Crush","Evil J0rdan","Good Credit"],"'Rather Lie'."],
+["collab",2,"Which Weeknd single features Carti?",["Timeless","Blinding Lights","Dancing in the Flames","Die for You"],"'Timeless', 2024."],
+["collab",2,"Carti was a support act on which tour?",["After Hours til Dawn","Circus Maximus","Eras","Big Steppers"],"He supported The Weeknd's After Hours til Dawn Tour."],
+["collab",2,"aespa's Giselle has a leaked, unreleased song with which Opium artist?",["Destroy Lonely","Ken Carson","Playboi Carti","Beno!"],"In May 2026 she said it's one of her favorites but unreleased for a reason."],
+["collab",3,"What word did Giselle sign off with when teasing a track made with Opium-circle producers?",["KPOPIUM","VAMPSPA","00ESPA","YVL4L"],"'KPOPIUM', on Instagram Live in January 2026."],
+["collab",2,"Snow Strippers are…",["An electronic duo","An Opium signee","A producer tag","A Carti alias"],"Tatiana Schwaninger and Graham Perez. Not signed to Opium."],
+["collab",3,"Which rage album was inspired by its maker seeing Snow Strippers live?",["OsamaSon's Jump Out","Ken Carson's More Chaos","Che's Rest in Bass","Carti's MUSIC"],"OsamaSon went to a Snow Strippers show with producer OK."],
+["collab",2,"Which rapper shows up on three MUSIC tracks, including 'Good Credit'?",["Kendrick Lamar","Drake","J. Cole","Tyler, the Creator"],"Kendrick Lamar."],
+["collab",1,"'I Luv It' is Carti with which pop singer?",["Camila Cabello","Dua Lipa","Olivia Rodrigo","Charli xcx"],"Camila Cabello, 2024."],
+["collab",2,"Carti hopped on the remix of which Latto song?",["Blick Sum","Big Mama","Put It on da Floor","Sunday Service"],"'Blick Sum'."],
+["collab",3,"Opium stylist Mitch Modes previously worked for which artist's imprint?",["The Weeknd's XO","Drake's OVO","Travis's Cactus Jack","Ye's GOOD"],"XO, another Weeknd connection."],
+["leaks",1,"Which Young Nudy and Carti song leaked in April 2019 and went viral anyway?",["Pissy Pamper","Magnolia","Shoota","R.I.P."],"'Pissy Pamper' leaked on April 18, 2019."],
+["leaks",2,"What did fans rename that leak?",["Kid Cudi","Baby Voice","Red","Vamp Anthem"],"It spread as 'Kid Cudi'."],
+["leaks",3,"How far did an unofficial upload of it get?",["No. 1 on Spotify's US Viral 50","No. 1 on the Hot 100","A Grammy nomination","Platinum certification"],"A fan upload topped Spotify's US Viral 50 before it was pulled."],
+["leaks",2,"Who produced 'Pissy Pamper'?",["Pi'erre Bourne","F1lthy","Metro Boomin","Lucian"],"Pi'erre Bourne."],
+["leaks",2,"Which official 2020 single brought the baby voice people first met through that leak?",["@ MEH","Sky","Stop Breathing","Vamp Anthem"],"'@ MEH', April 2020."],
+["leaks",2,"'2024', 'BACKR00MS' and 'EVILJ0RDAN' reached fans how?",["Official video drops, not leaks","A hacked hard drive","A Discord group buy","A radio rip"],"Carti put them out himself as videos and promo singles from December 2023 on."],
+["leaks",1,"How did Giselle describe her leaked song with Destroy Lonely?",["Unreleased for a reason","Dropping Friday","Not her voice","A demo for aespa"],"She called it a favorite but said it's unreleased for a reason."]
+].map((a,i)=>({id:i,m:a[0],d:a[1],q:a[2],o:a[3],e:a[4]}));
+
+const RANKS=[[0,"Tourist"],[100,"Lurker"],[300,"Mosher"],[600,"Vamp"],[1000,"King Vamp"]];
+const ACH=[
+ ["first","🩸","First Blood","Finish your first drill"],
+ ["perfect","💯","No Skips","Get every question right in a drill"],
+ ["combo5","🔥","Rage Mode","Hit a 5-answer combo"],
+ ["streak3","🦇","Three Nights","Keep a 3-day streak"],
+ ["all","🗝️","All Trims","Try every module"],
+ ["exam","👑","Certified","Score 80%+ on the Final Exam"],
+ ["bars","📝","Off the Dome","Finish a memorize set"],
+ ["king","🧛","King Vamp","Reach the top rank"]
+];
+const TRACKS=["A0sP269-iuQ","ELNZqYk_6ZM","kJXuQXGT3T0","0T2g5Yrk0DI","B4Loj9Qr6es"];
+const NAV=[["quest","🦇","Quest"],["listen","🎧","Listen"],["memorize","📝","Memorize"],["leaks","💧","Leaks"],["about","✦","About"]];
+const GOAL=60,KEY="yvlpq1";
+const fresh=()=>({xp:0,streak:0,last:"",stats:{},seen:{},ach:{},placed:false,day:{d:"",xp:0},sfx:true});
+let S=fresh();
+try{const s=JSON.parse(localStorage.getItem(KEY));if(s)S=Object.assign(S,s)}catch(e){}
+let SETS=[];try{SETS=JSON.parse(localStorage.getItem(KEY+"sets"))||[]}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));localStorage.setItem(KEY+"sets",JSON.stringify(SETS))}catch(e){}};
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s),app=$("#app");
+const dstr=t=>{const d=new Date(t);return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()};
+const today=()=>dstr(Date.now());
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function rank(){let r=0;RANKS.forEach((x,i)=>{if(S.xp>=x[0])r=i});return r}
+function acc(m){const s=S.stats[m];return s&&s.t?Math.round(100*s.c/s.t):null}
+function weakest(){let w=null,b=101;for(const m in MODS){const a=acc(m);if(a===null)return m;if(a<b){b=a;w=m}}return w}
+function grant(id){if(!S.ach[id]){S.ach[id]=1;return true}return false}
+function dayXp(){if(S.day.d!==today())S.day={d:today(),xp:0};return S.day.xp}
+
+/* ---------- audio: sfx + original synth loop ---------- */
+let AC=null,master=null,beatOn=false,beatTimer=null,step=0,nextT=0,noiseBuf=null,vol=.5;
+function ctx(){if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();master=AC.createGain();master.gain.value=vol;master.connect(AC.destination);
+  noiseBuf=AC.createBuffer(1,AC.sampleRate*.2,AC.sampleRate);const d=noiseBuf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1}
+ if(AC.state==="suspended")AC.resume();return AC}
+function tone(f,t,dur,type,g,dest){const o=AC.createOscillator(),a=AC.createGain();o.type=type;o.frequency.setValueAtTime(f,t);a.gain.setValueAtTime(g,t);a.gain.exponentialRampToValueAtTime(.001,t+dur);o.connect(a);a.connect(dest||AC.destination);o.start(t);o.stop(t+dur+.02);return o}
+function sfx(ok){if(!S.sfx)return;try{if(!ctx())return;const t=AC.currentTime;if(ok){tone(660,t,.12,"triangle",.18);tone(990,t+.09,.18,"triangle",.18)}else{tone(140,t,.25,"sawtooth",.14)}}catch(e){}}
+function dist(){const w=AC.createWaveShaper(),c=new Float32Array(256);for(let i=0;i<256;i++){const x=i/128-1;c[i]=Math.tanh(x*4)}w.curve=c;return w}
+let drive=null;
+const BASS=[43.65,0,0,43.65,0,0,51.91,0,0,0,43.65,38.89,0,0,58.27,0];
+const LEAD=[349.2,0,415.3,0,523.3,0,415.3,349.2,0,311.1,0,415.3,523.3,0,622.3,0];
+function playStep(i,t){
+ if(BASS[i]){const o=tone(BASS[i]*2.2,t,.5,"sine",.9,drive);o.frequency.exponentialRampToValueAtTime(BASS[i],t+.09)}
+ if(i%2===0||i===13||i===15){const s=AC.createBufferSource(),h=AC.createBiquadFilter(),a=AC.createGain();s.buffer=noiseBuf;h.type="highpass";h.frequency.value=7500;a.gain.setValueAtTime(i%4===0?.16:.09,t);a.gain.exponentialRampToValueAtTime(.001,t+.045);s.connect(h);h.connect(a);a.connect(master);s.start(t);s.stop(t+.06)}
+ if(i===4||i===12){const s=AC.createBufferSource(),b=AC.createBiquadFilter(),a=AC.createGain();s.buffer=noiseBuf;b.type="bandpass";b.frequency.value=1900;a.gain.setValueAtTime(.3,t);a.gain.exponentialRampToValueAtTime(.001,t+.16);s.connect(b);b.connect(a);a.connect(master);s.start(t);s.stop(t+.18)}
+ if(LEAD[i]){const f=AC.createBiquadFilter();f.type="lowpass";f.frequency.setValueAtTime(2600,t);f.frequency.exponentialRampToValueAtTime(500,t+.2);f.connect(drive);tone(LEAD[i],t,.2,"sawtooth",.1,f);tone(LEAD[i]*1.006,t,.2,"square",.05,f)}
+}
+function beat(on){
+ if(on){if(!ctx())return;bg.pause();if(!drive){drive=dist();const g=AC.createGain();g.gain.value=.55;drive.connect(g);g.connect(master)}
+  beatOn=true;step=0;nextT=AC.currentTime+.06;beatTimer=setInterval(()=>{while(nextT<AC.currentTime+.12){playStep(step%16,nextT);nextT+=60/148/4;step++}},25)}
+ else{beatOn=false;clearInterval(beatTimer)}
+}
+const bg=$("#bg");let trackName="";
+$("#trackFile").onchange=e=>{const f=e.target.files[0];if(!f)return;beat(false);bg.src=URL.createObjectURL(f);bg.volume=vol;trackName=f.name;bg.play().catch(()=>{});if(view==="listen")render()};
+
+/* ---------- routing ---------- */
+let view="quest",D=null,timer=null,M={set:null,line:0,mode:"blank"};
+const VIEWS={quest:home,listen,memorize,leaks,about,analytics:stats,trophies:achV};
+function go(v){view=v;clearInterval(timer);render();try{if(VIEWS[v]&&location.hash!=="#"+v)location.hash=v}catch(e){}}
+window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(VIEWS[h]&&h!==view){view=h;clearInterval(timer);render()}});
+function chrome(){
+ $("#pStreak").textContent="🔥 "+S.streak;$("#pXp").textContent="⚡ "+S.xp;
+ $("#links").innerHTML=NAV.map(n=>`<button data-v="${n[0]}" class="${view===n[0]?"on":""}">${n[2]}</button>`).join("");
+ $("#tabs").innerHTML=NAV.map(n=>`<button data-v="${n[0]}" class="${view===n[0]?"on":""}"><em>${n[1]}</em>${n[2]}</button>`).join("");
+ $$("#links button,#tabs button").forEach(b=>b.onclick=()=>go(b.dataset.v));
+ $("#tabs").style.display=view==="drill"?"none":"";
+}
+$("#logo").onclick=()=>go("quest");
+function render(){chrome();(VIEWS[view]||{drill,done}[view]||home)();window.scrollTo(0,0)}
+const BAT=`<svg class="bat" viewBox="0 0 200 90" aria-hidden="true"><path d="M100 30l-6-14-4 12c-12-10-30-14-50-8 10 4 14 12 14 20-10-6-22-6-34 0 16 2 26 12 30 26 8-10 18-12 28-6 2-10 10-16 22-16s20 6 22 16c10-6 20-4 28 6 4-14 14-24 30-26-12-6-24-6-34 0 0-8 4-16 14-20-20-6-38-2-50 8l-4-12z"/></svg>`;
+const TICK="young vamp life ✦ drill daily ✦ keep the streak ✦ climb to king vamp ✦ ";
+
+/* ---------- quest home ---------- */
+function home(){
+ const r=rank(),nx=RANKS[r+1],lo=RANKS[r][0],pct=nx?Math.round(100*(S.xp-lo)/(nx[0]-lo)):100,w=weakest(),dx=dayXp(),dp=Math.min(100,Math.round(100*dx/GOAL));
+ app.innerHTML=`
+ <div class="card hero pop">${BAT}
+  <div class="tag">Your rank</div>
+  <div class="rank gothic">${RANKS[r][1]}</div>
+  <div class="bar" style="max-width:420px"><i style="width:${pct}%"></i></div>
+  <div class="sub">${nx?`${nx[0]-S.xp} XP to ${nx[1]}`:"Top of the ladder."}</div>
+ </div>
+ <div class="ticker"><span>${TICK.repeat(6)}</span></div>
+ <div class="card"><div class="row" style="align-items:flex-start">
+  <div style="flex:1"><div class="tag">${S.placed?"Today's roadmap":"Start here"}</div>
+  <p style="margin:6px 0 14px;font-size:15px">${S.placed?`Your weakest area is <b>${MODS[w].n}</b>. Today's drill leans on it.`:"Take the placement check. Ten questions that adapt to find your gaps."}</p></div>
+  <div class="ring" style="--p:${dp}" title="Daily goal"><b>${dx}/${GOAL}</b></div></div>
+  <button class="btn" id="main">${S.placed?"Start daily drill · 10 questions":"Take placement check"}</button>
+ </div>
+ <div class="grid">${Object.keys(MODS).map(m=>{const a=acc(m);return `<button class="mod" data-m="${m}"><div><div class="n">${MODS[m].n}</div><div class="p">${MODS[m].d}</div></div><div><div class="p">${a===null?"Not started":a+"% accuracy"}</div><div class="mini"><i style="width:${a||0}%"></i></div></div></button>`}).join("")}</div>
+ <button class="btn ghost" id="exam">Final Exam · 20 questions · 6:00</button>
+ <div style="height:12px"></div>
+ <div class="btns"><button class="btn ghost" id="an">📊 Analytics</button><button class="btn ghost" id="tr">🏆 Trophies</button></div>
+ <div class="foot">Unofficial fan-made quiz. Not affiliated with Playboi Carti, Opium, YVL or any artist named.<br>Questions checked November 2026.</div>`;
+ $("#main").onclick=()=>start(S.placed?"daily":"place");
+ $("#exam").onclick=()=>start("exam");$("#an").onclick=()=>go("analytics");$("#tr").onclick=()=>go("trophies");
+ $$(".mod").forEach(b=>b.onclick=()=>start("mod",b.dataset.m));
+}
+
+/* ---------- drills ---------- */
+const fmt=s=>Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
+function start(kind,m){
+ const pool=m?Q.filter(q=>q.m===m).length:99;
+ D={kind,m,n:Math.min(pool,kind==="exam"?20:kind==="mod"?8:10),i:0,right:0,xp:0,combo:0,best:0,lvl:kind==="exam"?2:1,used:{},cur:null,answered:false,left:360,missed:[],r0:rank()};
+ clearInterval(timer);
+ if(kind==="exam")timer=setInterval(()=>{D.left--;const t=$("#clock");if(t)t.textContent=fmt(D.left);if(D.left<=0)finish()},1000);
+ next();
+}
+function pick(){
+ let pool=Q.filter(q=>!D.used[q.id]);const order=Object.keys(MODS);
+ if(D.kind==="mod")pool=pool.filter(q=>q.m===D.m);
+ else if(D.kind==="place")pool=pool.filter(q=>q.m===order[D.i%order.length]);
+ else if(D.kind==="daily"&&Math.random()<.5){const w=weakest(),p=pool.filter(q=>q.m===w);if(p.length)pool=p}
+ if(!pool.length)return null;
+ for(const dd of [0,1,2]){const c=pool.filter(q=>Math.abs(q.d-D.lvl)===dd);if(c.length){const f=c.filter(q=>!S.seen[q.id]);return shuffle(f.length?f:c)[0]}}
+ return pool[0];
+}
+function next(){
+ if(D.i>=D.n)return finish();
+ const q=pick();if(!q)return finish();
+ D.cur=q;D.used[q.id]=1;D.answered=false;D.opts=shuffle(q.o);view="drill";render();
+}
+function drill(){
+ const q=D.cur;
+ app.innerHTML=`<div class="row"><button class="x" id="quit" aria-label="Quit">✕</button><div class="bar" style="flex:1"><i style="width:${100*D.i/D.n}%"></i></div>${D.kind==="exam"?`<span class="pill" id="clock">${fmt(D.left)}</span>`:`<span class="pill">🔥 ${D.combo}</span>`}</div>
+ <div class="card pop" style="margin-top:12px">
+  <div class="tag">${MODS[q.m].n} · ${["","Easy","Mid","Hard"][q.d]} · ${D.i+1}/${D.n}</div>
+  <div class="q">${esc(q.q)}</div>
+  ${D.opts.map((o,i)=>`<button class="opt" data-i="${i}"><kbd>${i+1}</kbd><span>${esc(o)}</span></button>`).join("")}
+  <div id="fb"></div>
+ </div>`;
+ $("#quit").onclick=()=>go("quest");
+ $$(".opt").forEach(b=>b.onclick=()=>answer(b));
+}
+function answer(b){
+ if(D.answered)return;D.answered=true;
+ const q=D.cur,ok=D.opts[+b.dataset.i]===q.o[0];
+ $$(".opt").forEach(x=>{x.disabled=true;if(D.opts[+x.dataset.i]===q.o[0])x.classList.add("ok")});
+ const st=S.stats[q.m]=S.stats[q.m]||{c:0,t:0};st.t++;S.seen[q.id]=1;
+ let gain=0;
+ if(ok){st.c++;D.right++;D.combo++;D.best=Math.max(D.best,D.combo);gain=10*q.d+(D.combo>=3?5:0);D.lvl=Math.min(3,D.lvl+1);if(D.combo>=5&&grant("combo5"))D.gotCombo=true}
+ else{b.classList.add("bad","shake");D.combo=0;D.lvl=Math.max(1,D.lvl-1);D.missed.push(q)}
+ sfx(ok);dayXp();S.day.xp+=gain;D.xp+=gain;S.xp+=gain;save();D.i++;chrome();
+ $("#fb").innerHTML=`<div class="fb ${ok?"ok":"bad"}"><b>${ok?`Correct · +${gain} XP${D.combo>=3?" · combo bonus":""}`:"Not it."}</b><br>${esc(q.e)}</div><button class="btn" id="nx">${D.i>=D.n?"Finish":"Continue"}</button>`;
+ $("#nx").onclick=next;
+}
+document.addEventListener("keydown",e=>{
+ if(view!=="drill"||e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA")return;
+ if(!D.answered&&e.key>="1"&&e.key<="4"){const b=$$(".opt")[+e.key-1];if(b)answer(b)}
+ else if(D.answered&&e.key==="Enter"){e.preventDefault();next()}
+});
+function finish(){
+ clearInterval(timer);
+ const t=today();
+ if(D.i&&S.last!==t){S.streak=S.last===dstr(Date.now()-864e5)?S.streak+1:1;S.last=t}
+ D.new=D.gotCombo?["combo5"]:[];const g=id=>{if(grant(id))D.new.push(id)};
+ if(D.i){g("first");if(D.right===D.i&&D.i>=8)g("perfect")}
+ if(S.streak>=3)g("streak3");
+ if(Object.keys(MODS).every(m=>S.stats[m]))g("all");
+ if(D.kind==="exam"&&D.right/D.n>=.8)g("exam");
+ if(rank()===RANKS.length-1)g("king");
+ if(D.i)S.placed=true;
+ save();view="done";render();
+}
+function done(){
+ const den=D.kind==="exam"?D.n:D.i,pct=den?Math.round(100*D.right/den):0,up=rank()>D.r0;
+ app.innerHTML=`<div class="card hero center pop">${BAT}
+  <div class="tag">${D.kind==="exam"?"Final Exam":D.kind==="place"?"Placement":"Drill complete"}</div>
+  <div class="big" style="margin:10px 0">${pct}%</div>
+  <div class="sub">${D.right} right · +${D.xp} XP · best combo ${D.best}</div>
+  <p style="margin-top:12px">${up?`Rank up. You are now <b>${RANKS[rank()][1]}</b>.`:D.kind==="place"?`Start with <b>${MODS[weakest()].n}</b>. That's your biggest gap.`:pct>=80?"Certified. Keep the streak alive.":"Run it back. The drill adapts to what you missed."}</p>
+ </div>
+ ${D.new.length?`<div class="card"><div class="tag">Unlocked</div>${D.new.map(id=>{const a=ACH.find(x=>x[0]===id);return `<div class="ach"><span>${a[1]}</span><div><b>${a[2]}</b><div class="sub">${a[3]}</div></div></div>`}).join("")}</div>`:""}
+ ${D.missed.length?`<div class="card"><div class="tag">Review what you missed</div>${D.missed.map(q=>`<div class="miss">${esc(q.q)}<br><b>${esc(q.o[0])}</b> <span class="sub">· ${esc(q.e)}</span></div>`).join("")}</div>`:""}
+ <div class="btns"><button class="btn" id="h">Back to quest</button><button class="btn ghost" id="cp">Copy result</button></div>`;
+ $("#h").onclick=()=>go("quest");
+ $("#cp").onclick=()=>{const txt=`YVL Prep Quest · ${pct}% · ${RANKS[rank()][1]} · 🔥${S.streak} · ⚡${S.xp} XP`;
+  const b=$("#cp");try{navigator.clipboard.writeText(txt).then(()=>b.textContent="Copied",()=>b.textContent=txt)}catch(e){b.textContent=txt}};
+}
+
+/* ---------- analytics + trophies ---------- */
+function stats(){
+ const tot=Object.values(S.stats).reduce((a,s)=>({c:a.c+s.c,t:a.t+s.t}),{c:0,t:0});
+ app.innerHTML=`<div class="card pop"><div class="tag">Analytics</div><h2 class="sec">Where you lose points</h2>
+ ${Object.keys(MODS).map(m=>{const a=acc(m),s=S.stats[m];return `<div class="skill"><div class="row"><b>${MODS[m].n}</b><span>${a===null?"Not started":a+"% · "+s.t+" answered"}</span></div><div class="bar"><i style="width:${a||0}%"></i></div></div>`}).join("")}
+ <div class="sub" style="margin-top:8px">${tot.t?`${tot.c} of ${tot.t} correct overall. Focus next: <b style="color:var(--ink)">${MODS[weakest()].n}</b>.`:"Answer a few questions to see your breakdown."}</div></div>
+ <button class="btn ghost" id="reset">Reset progress</button><div id="conf"></div>`;
+ $("#reset").onclick=()=>{$("#conf").innerHTML=`<div class="card" style="margin-top:12px"><p style="margin-bottom:10px">Wipe XP, streak and trophies? Memorize sets are kept.</p><button class="btn" id="yes">Yes, wipe it</button></div>`;$("#yes").onclick=()=>{S=fresh();save();go("quest")}};
+}
+function achV(){
+ app.innerHTML=`<div class="card pop"><div class="tag">Trophies</div><h2 class="sec">${Object.keys(S.ach).length} of ${ACH.length} unlocked</h2>${ACH.map(a=>`<div class="ach ${S.ach[a[0]]?"":"off"}"><span>${a[1]}</span><div><b>${a[2]}</b><div class="sub">${a[3]}</div></div></div>`).join("")}</div>
+ <div class="card"><div class="tag">Rank ladder</div>${RANKS.map((r,i)=>`<div class="ach ${i<=rank()?"":"off"}"><span>${i+1}</span><div><b class="gothic" style="font-size:22px">${r[1]}</b><div class="sub">${r[0]} XP</div></div></div>`).join("")}</div>`;
+}
+
+/* ---------- listen ---------- */
+function listen(){
+ app.innerHTML=`<div class="card hero pop">${BAT}<div class="tag">Listen</div><h2 class="sec">Soundtracks</h2><p class="lead">Instrumentals only. Put one on, then go drill.</p></div>
+ <div class="card"><div class="row"><div><div class="tag">Built in</div><h3 style="font-size:26px">House Loop</h3><div class="sub">An original rage-style loop synthesized in your browser. No vocals, no samples.</div></div><div class="eq ${beatOn?"on":""}"><i></i><i></i><i></i><i></i></div></div>
+  <div style="height:12px"></div><button class="btn" id="beat">${beatOn?"Stop loop":"Play loop"}</button>
+  <div style="margin-top:12px" class="sub">Volume</div><input type="range" id="vol" min="0" max="1" step=".01" value="${vol}"></div>
+ <div class="card"><div class="tag">Study playlist</div><h3 style="font-size:26px">Picked by the creators</h3><div class="sub">Each one opens on YouTube in a new tab and keeps playing while you drill here.</div>
+  ${TRACKS.map((id,i)=>`<a class="track" href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener"><span class="no">${String(i+1).padStart(2,"0")}</span><span><b>Soundtrack ${String(i+1).padStart(2,"0")}</b><br><span class="sub">Instrumental · YouTube</span></span><span class="go">Open ↗</span></a>`).join("")}</div>
+ <div class="card"><div class="tag">Your own file</div><p style="margin:6px 0 12px;font-size:15px">${trackName?`Loaded: <b>${esc(trackName)}</b>`:"Load an audio file from your device and it loops while you drill."}</p>
+  <div class="btns"><button class="btn ghost" id="load">${trackName?"Change file":"Load a file"}</button>${trackName?`<button class="btn ghost" id="tog">${bg.paused?"Play":"Pause"}</button>`:""}</div>
+  <div class="sub" style="margin-top:10px">The file never leaves your device and has to be reloaded each visit.</div></div>
+ <div class="card"><div class="row"><div><b>Answer sounds</b><div class="sub">A chime when you're right, a buzz when you're not.</div></div><div class="seg"><button id="sOn" class="${S.sfx?"on":""}">On</button><button id="sOff" class="${S.sfx?"":"on"}">Off</button></div></div></div>`;
+ $("#beat").onclick=()=>{beat(!beatOn);listen()};
+ $("#vol").oninput=e=>{vol=+e.target.value;if(master)master.gain.value=vol;bg.volume=vol};
+ $("#load").onclick=()=>$("#trackFile").click();
+ const t=$("#tog");if(t)t.onclick=()=>{if(bg.paused){beat(false);bg.play().catch(()=>{})}else bg.pause();setTimeout(listen,60)};
+ $("#sOn").onclick=()=>{S.sfx=true;save();listen();sfx(true)};$("#sOff").onclick=()=>{S.sfx=false;save();listen()};
+}
+
+/* ---------- memorize ---------- */
+const norm=s=>s.toLowerCase().replace(/[^a-z0-9]/g,"");
+function memorize(){
+ if(M.set===null||!SETS[M.set])return memList();
+ const set=SETS[M.set],lines=set.text.split("\n").map(l=>l.trim()).filter(Boolean);
+ if(M.line>=lines.length){
+  const got=grant("bars");save();
+  app.innerHTML=`<div class="card hero center pop">${BAT}<div class="tag">Set complete</div><div class="big" style="font-size:54px;margin:10px 0">Off the dome</div><p class="sub">${lines.length} lines of “${esc(set.title)}”.${got?" Trophy unlocked: Off the Dome.":""}</p></div>
+  <div class="btns"><button class="btn" id="again">Run it again</button><button class="btn ghost" id="back">All sets</button></div>`;
+  $("#again").onclick=()=>{M.line=0;memorize()};$("#back").onclick=()=>{M.set=null;memorize()};return}
+ const words=lines[M.line].split(/\s+/);
+ let body;
+ if(M.mode==="blank"){
+  const cand=words.map((w,i)=>norm(w).length>=3?i:-1).filter(i=>i>=0),k=Math.max(1,Math.ceil(cand.length*.4)),hide=new Set(shuffle(cand.length?cand:[0]).slice(0,k));
+  body=words.map((w,i)=>hide.has(i)?`<input type="text" data-a="${esc(w)}" size="${Math.max(3,w.length)}" autocomplete="off" autocapitalize="off" spellcheck="false">`:esc(w)).join(" ");
+ }else body=words.map(w=>`<span data-w="${esc(w)}">${esc(w[0])}${"·".repeat(Math.max(0,w.length-1))}</span>`).join(" ");
+ app.innerHTML=`<div class="row"><button class="x" id="back" aria-label="Back">←</button><div class="bar" style="flex:1"><i style="width:${100*M.line/lines.length}%"></i></div><span class="pill">${M.line+1}/${lines.length}</span></div>
+ <div class="card pop" style="margin-top:12px"><div class="row"><div class="tag">${esc(set.title)}</div><div class="seg"><button id="mB" class="${M.mode==="blank"?"on":""}">Blanks</button><button id="mL" class="${M.mode==="letters"?"on":""}">First letters</button></div></div>
+  <div class="line" id="line">${body}</div>
+  <div class="btns">${M.mode==="blank"?`<button class="btn" id="chk">Check</button>`:""}<button class="btn ghost" id="rev">Reveal</button><button class="btn ghost" id="nxl">Next line</button></div></div>`;
+ $("#back").onclick=()=>{M.set=null;memorize()};
+ $("#mB").onclick=()=>{M.mode="blank";memorize()};$("#mL").onclick=()=>{M.mode="letters";memorize()};
+ $("#nxl").onclick=()=>{M.line++;memorize()};
+ $("#rev").onclick=()=>{$$("#line input").forEach(i=>{i.value=i.dataset.a;i.className="ok"});$$("#line span").forEach(s=>s.textContent=s.dataset.w)};
+ const c=$("#chk");if(c){const check=()=>{let all=true;$$("#line input").forEach(i=>{const ok=norm(i.value)===norm(i.dataset.a);i.className=ok?"ok":"bad";all=all&&ok});sfx(all);if(all)setTimeout(()=>{M.line++;memorize()},500)};
+  c.onclick=check;$$("#line input").forEach(i=>i.onkeydown=e=>{if(e.key==="Enter")check()});const f=$("#line input");if(f)f.focus()}
+}
+function memList(){
+ app.innerHTML=`<div class="card hero pop">${BAT}<div class="tag">Memorize</div><h2 class="sec">Learn it word for word</h2><p class="lead">Paste the bars you're learning. The trainer blanks out words line by line until you can run the whole thing from memory.</p></div>
+ ${SETS.length?`<div class="card"><div class="tag">Your sets</div>${SETS.map((s,i)=>`<div class="ach"><span>📝</span><div style="flex:1"><b>${esc(s.title)}</b><div class="sub">${s.text.split("\n").filter(l=>l.trim()).length} lines</div></div><button class="btn sm" data-o="${i}">Practice</button><button class="btn sm ghost" data-x="${i}">Delete</button></div>`).join("")}</div>`:""}
+ <div class="card"><div class="tag">New set</div>
+  <input type="text" id="mt" placeholder="Title, e.g. song name" maxlength="80">
+  <textarea id="mx" placeholder="Paste or type the lines here, one per line"></textarea>
+  <div style="height:10px"></div><button class="btn" id="ms">Save and practice</button><div id="merr" class="sub" style="margin-top:8px"></div>
+  <div class="note">Nothing ships with this page. Whatever you paste stays in this browser on this device and is never uploaded.</div></div>`;
+ $$("[data-o]").forEach(b=>b.onclick=()=>{M={set:+b.dataset.o,line:0,mode:M.mode};memorize()});
+ $$("[data-x]").forEach(b=>b.onclick=()=>{SETS.splice(+b.dataset.x,1);save();memorize()});
+ $("#ms").onclick=()=>{const text=$("#mx").value.trim(),title=$("#mt").value.trim()||"Untitled set";if(!text){$("#merr").textContent="Add at least one line first.";return}
+  SETS.push({title,text});save();M={set:SETS.length-1,line:0,mode:M.mode};memorize()};
+}
+
+/* ---------- leaks ---------- */
+const LEAKS=[
+ ["April 2019","Pissy Pamper","The Young Nudy and Carti song, produced by Pi'erre Bourne, leaks on April 18. Fans rename it “Kid Cudi”, and an unofficial upload climbs to the top of Spotify's US Viral 50 before it's pulled. The baby voice becomes canon."],
+ ["April 2020","@ MEH","The first official single to carry that baby voice arrives a year later. For a lot of people it confirmed what the leak had already taught them to expect."],
+ ["Dec 2023 – 2024","The loosies that weren't leaks","“2024”, “BACKR00MS” and “EVILJ0RDAN” arrive as official videos and promo singles ahead of MUSIC. Often filed under leaks. They aren't."],
+ ["January 2026","KPOPIUM","aespa's Giselle previews an unreleased track on Instagram Live, made with producers from the Opium circle, and signs off with one word."],
+ ["May 2026","Giselle and Destroy Lonely","Their unreleased collab surfaces online. Giselle calls it one of her favorites and says it's unreleased for a reason."]
+];
+function leaks(){
+ const a=acc("leaks");
+ app.innerHTML=`<div class="card hero pop">${BAT}<div class="tag">Leaks</div><h2 class="sec">Leak Lore</h2><p class="lead">The history of what slipped out, what got pulled, and what people only think was a leak.</p></div>
+ <div class="card"><div class="tl">${LEAKS.map(l=>`<div class="ev"><div class="when">${l[0]}</div><h3>${l[1]}</h3><p>${l[2]}</p></div>`).join("")}</div>
+  <div class="note">History only. This site doesn't host, stream or link to unreleased music. If an artist says it's unreleased for a reason, that's the reason.</div></div>
+ <div class="card"><div class="row"><div><div class="tag">Test yourself</div><b>Leak Lore quiz</b><div class="sub">${a===null?"Not started":a+"% accuracy"}</div></div><button class="btn sm" id="lq">Start</button></div></div>`;
+ $("#lq").onclick=()=>start("mod","leaks");
+}
+
+/* ---------- about ---------- */
+function about(){
+ app.innerHTML=`<div class="card hero pop">${BAT}<div class="tag">About the creators</div><h2 class="sec">Why this exists</h2><p class="lead">A study app for the one subject we never needed to be told to study.</p></div>
+ <div class="card about">
+  <p>YVL Prep Quest is heavily inspired by SAT Prep Quest. We'll say that plainly, because the structure here is theirs in spirit: short daily drills, a streak to protect, a rank to climb, and analytics that show you where the points go.</p>
+  <p>We also didn't enjoy using it. The idea was right and the experience didn't hold us. It felt like homework with a scoreboard attached, and we kept closing it.</p>
+  <p>So we kept what worked and rebuilt it around something we'd open at two in the morning without being asked. Same discipline, different syllabus. If the original taught us anything, it's that people will drill every day when they care about the material.</p>
+  <p class="sub">Credit where it's due: the format belongs to the people who made SAT Prep Quest. The taste is ours.</p>
+ </div>
+ <div class="card"><div class="tag">How it works</div><div class="steps">
+  <div><b>Place</b>Ten adaptive questions find your gaps.</div>
+  <div><b>Drill</b>Ten a day, weighted toward your weakest module.</div>
+  <div><b>Climb</b>XP moves you from Tourist to King Vamp.</div>
+  <div><b>Certify</b>Twenty questions, six minutes, 80% to pass.</div></div></div>
+ <div class="card"><div class="tag">Fine print</div><p class="sub" style="margin-top:6px">Unofficial and fan-made. Not affiliated with or endorsed by Playboi Carti, Opium, YVL, SAT Prep Quest or any artist named. No artist photos, lyrics or recordings are included. Progress is saved only in this browser.</p></div>`;
+}
+
+/* ---------- ember background ---------- */
+(function(){
+ const c=$("#fx"),x=c.getContext&&c.getContext("2d");if(!x||matchMedia("(prefers-reduced-motion:reduce)").matches)return;
+ let W,H,P=[];const size=()=>{W=c.width=innerWidth;H=c.height=innerHeight};size();addEventListener("resize",size);
+ for(let i=0;i<46;i++)P.push({x:Math.random(),y:Math.random(),r:Math.random()*1.8+.4,v:Math.random()*.0009+.0003,a:Math.random()*.5+.15,d:Math.random()*6});
+ (function loop(t){x.clearRect(0,0,W,H);for(const p of P){p.y-=p.v;if(p.y<-.02){p.y=1.02;p.x=Math.random()}
+  x.globalAlpha=p.a*(.6+.4*Math.sin(t/900+p.d));x.fillStyle="#ff2a1f";x.beginPath();x.arc((p.x+Math.sin(t/4000+p.d)*.01)*W,p.y*H,p.r,0,7);x.fill()}
+  requestAnimationFrame(loop)})(0);
+})();
+
+(function(){const h=location.hash.slice(1);if(VIEWS[h])view=h;render()})();
+</script>
+</body>
+</html>
